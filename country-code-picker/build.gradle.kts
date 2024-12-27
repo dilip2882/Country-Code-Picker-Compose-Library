@@ -58,14 +58,26 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 }
 
-configure<PublishingExtension> {
-    publications{
-        create<MavenPublication>("maven") {
-            groupId = "com.dilip"
-            artifactId = "country-code-picker"
-            version = "0.1"
-            afterEvaluate{
-                artifact(tasks.getByName("bundleReleaseAar"))
+afterEvaluate {
+    configure<PublishingExtension> {
+        publications {
+            create<MavenPublication>("maven") {
+                groupId = "com.dilip"
+                artifactId = "country-code-picker"
+                version = "1.0.0"
+                afterEvaluate {
+                    artifact(tasks.named("bundleReleaseAar").get())
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                url = uri("https://your.repository.url")
+                credentials {
+                    username = project.findProperty("repoUser") as String? ?: ""
+                    password = project.findProperty("repoPassword") as String? ?: ""
+                }
             }
         }
     }
