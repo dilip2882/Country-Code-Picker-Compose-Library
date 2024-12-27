@@ -52,7 +52,6 @@ fun CountryCodePickerTextField(
         mutableStateOf(selectedCountry)
     }
 
-
     val validatePhoneNumber = remember(context) {
         CCPValidator(context = context)
     }

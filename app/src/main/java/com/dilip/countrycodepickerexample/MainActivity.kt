@@ -308,7 +308,6 @@ fun ShowCCPWithTextField() {
 
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun CountryCodePickerPreview() {
