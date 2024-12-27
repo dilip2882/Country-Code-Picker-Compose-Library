@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.dilip.country_code_picker"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
@@ -38,6 +38,7 @@ android {
 
 dependencies {
 
+    api(libs.libphonenumber.android)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -54,4 +55,17 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+
+configure<PublishingExtension> {
+    publications{
+        create<MavenPublication>("maven") {
+            groupId = "com.dilip"
+            artifactId = "country-code-picker"
+            version = "1.0.0"
+            afterEvaluate{
+                artifact(tasks.getByName("bundleReleaseAar"))
+            }
+        }
+    }
 }
