@@ -25,6 +25,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -41,8 +42,8 @@ android {
 
 dependencies {
 
-//    implementation(project(":country-code-picker"))
-    implementation("com.github.dilip2882:Country-Code-Picker-Compose-Library:main-225247ad51-1")
+    implementation(project(":country-code-picker"))
+//    implementation("com.github.dilip2882:Country-Code-Picker-Compose-Library:main-225247ad51-1")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
