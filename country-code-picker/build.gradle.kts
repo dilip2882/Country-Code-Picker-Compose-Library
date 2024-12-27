@@ -63,7 +63,7 @@ configure<PublishingExtension> {
         create<MavenPublication>("maven") {
             groupId = "com.dilip"
             artifactId = "country-code-picker"
-            version = "1.0.0"
+            version = "0.1"
             afterEvaluate{
                 artifact(tasks.getByName("bundleReleaseAar"))
             }
