@@ -1,8 +1,8 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    alias(libs.plugins.kotlin.compose)
     id("maven-publish")
+    id("org.jetbrains.compose")
 }
 
 android {
@@ -37,6 +37,7 @@ android {
     publishing {
         singleVariant("release") {
             withJavadocJar()
+            withSourcesJar()
         }
     }
 }
@@ -64,11 +65,12 @@ dependencies {
 afterEvaluate {
     publishing {
         publications {
-            create<MavenPublication>("maven") {
-                groupId = "com.dilip"
-                artifactId = "country-code-picker"
-                version = "0.0.1"
+            create<MavenPublication>("release") {
                 from(components["release"])
+
+                groupId = "com.dilip2882"
+                artifactId = "country-code-picker"
+                version = project.properties["version"]?.toString() ?: "1.0.0"
             }
         }
     }
