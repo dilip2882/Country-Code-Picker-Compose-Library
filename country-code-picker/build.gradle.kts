@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("maven-publish")
 }
 
 android {
@@ -57,14 +58,14 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 }
 
-configure<PublishingExtension> {
-    publications{
-        create<MavenPublication>("maven") {
-            groupId = "com.dilip"
-            artifactId = "country-code-picker"
-            version = "1.0.0"
-            afterEvaluate{
-                artifact(tasks.getByName("bundleReleaseAar"))
+afterEvaluate {
+    publishing {
+        publications {
+            create("release", MavenPublication::class.java) {
+                from(components.getByName("release"))
+                groupId = "com.dilip"
+                artifactId = "country-code-picker"
+                version = "0.1"
             }
         }
     }
