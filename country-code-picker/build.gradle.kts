@@ -1,7 +1,6 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
+    id("com.android.library") 
+    id("org.jetbrains.kotlin.android")
     id("maven-publish")
 }
 
@@ -11,7 +10,6 @@ android {
 
     defaultConfig {
         minSdk = 24
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -26,16 +24,23 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
         jvmTarget = "17"
     }
+
     buildFeatures {
         compose = true
+    }
+
+    publishing {
+        singleVariant("release") {
+            withJavadocJar()
+        }
     }
 }
 
 dependencies {
-
     api(libs.libphonenumber.android)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -56,17 +61,14 @@ dependencies {
 }
 
 afterEvaluate {
-    configure<PublishingExtension> {
+    publishing {
         publications {
             create<MavenPublication>("maven") {
                 groupId = "com.dilip"
                 artifactId = "country-code-picker"
-                version = "1.0.0"
-                afterEvaluate {
-                    artifact(tasks.named("bundleReleaseAar").get())
-                }
+                version = "0.0.1"
+                from(components["release"])
             }
         }
-
     }
 }
