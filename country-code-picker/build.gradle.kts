@@ -58,14 +58,14 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            create("release", MavenPublication::class.java) {
-                from(components.getByName("release"))
-                groupId = "com.dilip"
-                artifactId = "country-code-picker"
-                version = "0.1"
+configure<PublishingExtension> {
+    publications{
+        create<MavenPublication>("maven") {
+            groupId = "com.dilip"
+            artifactId = "country-code-picker"
+            version = "1.0.0"
+            afterEvaluate{
+                artifact(tasks.getByName("bundleReleaseAar"))
             }
         }
     }
