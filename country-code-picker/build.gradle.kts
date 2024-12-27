@@ -19,12 +19,9 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -71,14 +68,5 @@ afterEvaluate {
             }
         }
 
-        repositories {
-            maven {
-                url = uri("https://your.repository.url")
-                credentials {
-                    username = project.findProperty("repoUser") as String? ?: ""
-                    password = project.findProperty("repoPassword") as String? ?: ""
-                }
-            }
-        }
     }
 }

@@ -41,8 +41,7 @@ android {
 
 dependencies {
 
-//    implementation(project(":country-code-picker"))
-    implementation("com.github.dilip2882:Country-Code-Picker-Compose-Library:-SNAPSHOT")
+    implementation(project(":country-code-picker"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
