@@ -2,6 +2,7 @@ package com.dilip.country_code_picker
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -67,57 +68,56 @@ fun CountryCodePickerTextField(
         )
     }
 
-
-    OutlinedTextField(
-        value = number,
-        onValueChange = {
-            isNumberValid = validatePhoneNumber(
-                number = it, countryCode = country.countryCode
-            )
-            onValueChange(country.countryCode, it, isNumberValid)
-        },
+    Box(
         modifier = modifier
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = null // removes ripple
+                indication = null
             ) {
                 onClick()
+            }
+    ) {
+        OutlinedTextField(
+            value = number,
+            onValueChange = {
+                isNumberValid = validatePhoneNumber(
+                    number = it, countryCode = country.countryCode
+                )
+                onValueChange(country.countryCode, it, isNumberValid)
             },
-
-        textStyle = textStyle,
-        singleLine = true,
-        shape = shape,
-        label = label,
-        placeholder = placeholder,
-        leadingIcon = {
-            CountryCodePicker(
-                selectedCountry = country,
-                countryList = countryList,
-                onCountrySelected = {
-                    country = it
-                    isNumberValid = validatePhoneNumber(
-                        number = number, countryCode = it.countryCode
-                    )
-                    onValueChange(it.countryCode, number, isNumberValid)
-                },
-                viewCustomization = viewCustomization,
-                pickerCustomization = pickerCustomization,
-                backgroundColor = backgroundColor,
-                textStyle = textStyle,
-                showSheet = showSheet,
-                itemPadding = itemPadding
-            )
-
-        },
-        trailingIcon = trailingIcon,
-        isError = !isNumberValid && number.isNotEmpty() && showError,
-        visualTransformation = CCPTransformer(context, country.countryIso),
-        enabled = enabled,
-        keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions,
-        colors = colors
-    )
-
+            textStyle = textStyle,
+            singleLine = true,
+            shape = shape,
+            label = label,
+            placeholder = placeholder,
+            leadingIcon = {
+                CountryCodePicker(
+                    selectedCountry = country,
+                    countryList = countryList,
+                    onCountrySelected = {
+                        country = it
+                        isNumberValid = validatePhoneNumber(
+                            number = number, countryCode = it.countryCode
+                        )
+                        onValueChange(it.countryCode, number, isNumberValid)
+                    },
+                    viewCustomization = viewCustomization,
+                    pickerCustomization = pickerCustomization,
+                    backgroundColor = backgroundColor,
+                    textStyle = textStyle,
+                    showSheet = showSheet,
+                    itemPadding = itemPadding
+                )
+            },
+            trailingIcon = trailingIcon,
+            isError = !isNumberValid && number.isNotEmpty() && showError,
+            visualTransformation = CCPTransformer(context, country.countryIso),
+            enabled = enabled,
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
+            colors = colors
+        )
+    }
 
 }
 
