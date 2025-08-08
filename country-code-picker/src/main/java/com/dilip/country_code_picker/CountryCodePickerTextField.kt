@@ -1,8 +1,14 @@
 package com.dilip.country_code_picker
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,8 +23,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -49,56 +58,45 @@ fun CountryCodePickerTextField(
     showSheet: Boolean = false,
     itemPadding: Int = 10,
 ) {
-
     val context = LocalContext.current
 
-    var country by remember {
-        mutableStateOf(selectedCountry)
+    var country by remember { mutableStateOf(selectedCountry) }
+    val validatePhoneNumber = remember(context) { CCPValidator(context) }
+    var isNumberValid by rememberSaveable(country, number) {
+        mutableStateOf(validatePhoneNumber(number, country.countryCode))
     }
 
-    val validatePhoneNumber = remember(context) {
-        CCPValidator(context = context)
-    }
-
-    var isNumberValid: Boolean by rememberSaveable(country, number) {
-        mutableStateOf(
-            validatePhoneNumber(
-                number = number, countryCode = country.countryCode
-            ),
-        )
-    }
-
-    Box(
-        modifier = modifier
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null
+    OutlinedTextField(
+        value = number,
+        onValueChange = {
+            isNumberValid = validatePhoneNumber(it, country.countryCode)
+            onValueChange(country.countryCode, it, isNumberValid)
+        },
+        modifier = modifier.fillMaxWidth(),
+        textStyle = textStyle,
+        singleLine = true,
+        shape = shape,
+        label = label,
+        placeholder = placeholder,
+        leadingIcon = {
+            Row(
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .clickable(
+                        enabled = enabled,
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
+                        onClick()
+                    },
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                onClick()
-            }
-    ) {
-        OutlinedTextField(
-            value = number,
-            onValueChange = {
-                isNumberValid = validatePhoneNumber(
-                    number = it, countryCode = country.countryCode
-                )
-                onValueChange(country.countryCode, it, isNumberValid)
-            },
-            textStyle = textStyle,
-            singleLine = true,
-            shape = shape,
-            label = label,
-            placeholder = placeholder,
-            leadingIcon = {
                 CountryCodePicker(
                     selectedCountry = country,
                     countryList = countryList,
                     onCountrySelected = {
                         country = it
-                        isNumberValid = validatePhoneNumber(
-                            number = number, countryCode = it.countryCode
-                        )
+                        isNumberValid = validatePhoneNumber(number, it.countryCode)
                         onValueChange(it.countryCode, number, isNumberValid)
                     },
                     viewCustomization = viewCustomization,
@@ -108,19 +106,17 @@ fun CountryCodePickerTextField(
                     showSheet = showSheet,
                     itemPadding = itemPadding
                 )
-            },
-            trailingIcon = trailingIcon,
-            isError = !isNumberValid && number.isNotEmpty() && showError,
-            visualTransformation = CCPTransformer(context, country.countryIso),
-            enabled = enabled,
-            keyboardOptions = keyboardOptions,
-            keyboardActions = keyboardActions,
-            colors = colors
-        )
-    }
-
+            }
+        },
+        trailingIcon = trailingIcon,
+        isError = !isNumberValid && number.isNotEmpty() && showError,
+        visualTransformation = CCPTransformer(context, country.countryIso),
+        enabled = enabled,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
+        colors = colors
+    )
 }
-
 
 @Preview(showBackground = true)
 @Composable
