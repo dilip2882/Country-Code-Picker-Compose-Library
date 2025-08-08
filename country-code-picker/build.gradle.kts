@@ -75,7 +75,7 @@ afterEvaluate {
 
                 groupId = "com.dilip2882"
                 artifactId = "country-code-picker"
-                version = "1.0.1"
+                version = "1.0.6"
             }
         }
     }
