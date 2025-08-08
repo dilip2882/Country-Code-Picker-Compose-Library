@@ -1,13 +1,9 @@
 package com.dilip.country_code_picker
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -25,9 +21,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -39,7 +33,8 @@ fun CountryCodePickerTextField(
     modifier: Modifier = Modifier,
     number: String,
     onValueChange: (countryCode: String, value: String, isValid: Boolean) -> Unit,
-    onClick: () -> Unit = {},
+    onTextFieldClick: () -> Unit = {},
+    onCountryCodeClick: () -> Unit = {},
     enabled: Boolean = true,
     textStyle: TextStyle = LocalTextStyle.current,
     label: @Composable (() -> Unit)? = null,
@@ -72,7 +67,15 @@ fun CountryCodePickerTextField(
             isNumberValid = validatePhoneNumber(it, country.countryCode)
             onValueChange(country.countryCode, it, isNumberValid)
         },
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(
+                enabled = enabled && number.isEmpty(), // Only trigger hint when field is empty
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) {
+                onTextFieldClick()
+            },
         textStyle = textStyle,
         singleLine = true,
         shape = shape,
@@ -87,7 +90,7 @@ fun CountryCodePickerTextField(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null
                     ) {
-                        onClick()
+                        onCountryCodeClick()
                     },
                 verticalAlignment = Alignment.CenterVertically
             ) {
