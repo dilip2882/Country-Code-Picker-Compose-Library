@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.dilip.countrycodepicker"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 24
@@ -75,7 +75,7 @@ afterEvaluate {
 
                 groupId = "com.dilip2882"
                 artifactId = "country-code-picker"
-                version = project.properties["version"]?.toString() ?: "1.0.0"
+                version = "1.0.1"
             }
         }
     }
