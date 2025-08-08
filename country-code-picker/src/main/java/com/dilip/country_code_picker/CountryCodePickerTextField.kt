@@ -1,6 +1,7 @@
 package com.dilip.country_code_picker
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,8 +22,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,6 +58,7 @@ fun CountryCodePickerTextField(
     itemPadding: Int = 10,
 ) {
     val context = LocalContext.current
+    val focusRequester = remember { FocusRequester() }
 
     var country by remember { mutableStateOf(selectedCountry) }
     val validatePhoneNumber = remember(context) { CCPValidator(context) }
@@ -69,12 +74,15 @@ fun CountryCodePickerTextField(
         },
         modifier = modifier
             .fillMaxWidth()
-            .clickable(
-                enabled = enabled && number.isEmpty(), // Only trigger hint when field is empty
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null
-            ) {
-                onTextFieldClick()
+            .focusRequester(focusRequester)
+            .pointerInput(enabled, number) {
+                detectTapGestures(
+                    onTap = {
+                        if (enabled && number.isEmpty()) {
+                            onTextFieldClick()
+                        }
+                    }
+                )
             },
         textStyle = textStyle,
         singleLine = true,
