@@ -1,6 +1,7 @@
 package com.dilip.country_code_picker
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -76,9 +77,14 @@ fun CountryCodePickerTextField(
             onValueChange(country.countryCode, it, isNumberValid)
         },
         modifier = modifier
-            .clickable(enabled) {
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null // removes ripple
+            ) {
                 onClick()
-            },        textStyle = textStyle,
+            },
+
+        textStyle = textStyle,
         singleLine = true,
         shape = shape,
         label = label,
